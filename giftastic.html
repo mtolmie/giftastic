@@ -4,25 +4,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Trivia Game </title>
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css">   
+    <title> Giftastic </title> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     
 </head>
 
 <body>
-    <div class="jumbotron">
-    <input type="text" id ="timer">
-    <button id=start>Start Trivia Game</button>
-<h1 class="text-center"> 80's Movie Trivia Game!</h1>
-    <div class="text-center">
+
+<div class="container">
+    <h1> Cool Bands Search---Find a band that you like if I missed one from the selection</h1>
+    <!-- Rendered buttons will get dumped Here  -->
+    <div id="buttons-view"></div>
+    <form id="movie-form">
+      <button id=>Soundgarden</button>
+      <button id=>Pearl Jam</button>
+      <button id=>The Black Keys</button>
+      <button id=>Coldplay</button>
+      <button id=>BB King</button>
+      <input type="text" id="band-input"><br>
+      <!-- Button triggers new movie to be added -->
+      <input id="add-band" type="submit" value="submit">
+    </form>
+    <!-- Movies will get dumped dere -->
+    <div id="bands-view"></div>
 
 
+  <script type="text/javascript">
+    // Example queryURL for Giphy API
+    
 
+ var bandTopics = ["Soundgarden", "Pearl Jam", "The Black Keys", "Coldplay"];
+var queryURL = "http://api.giphy.com/v1/gifs/search?q=" +
+        bandTopics + "&api_key=dc6zaTOxFJmzC&limit=10";
 
+    function displaybandTopicsInfo() {
+        var topics = $(this).attr("data-name");
+        // Creating an AJAX call for the specific band button being clicked
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        }).done(function(response) {
+          // Creating a div to hold the movie
+          var bandDiv = $("<div class='band'>");
+          // Storing the rating data
+          var rating = response.Rated;
+          // Creating an element to have the rating displayed
+          var pOne = $("<p>").text("Rating: " + rating);
+ });
+      }
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="assets/javascript/app.js"></script>
+ // This function handles events where a movie button is clicked
+ 	$("#add-bandTopics").on("click", function(event) {
+        event.preventDefault();
+      // This line grabs the input from the textbox
+      var band = $("#band-input").val().trim();
+      //   // Adding movie from the textbox to our array
+       movies.push(band);
+      //   // Calling renderButtons which handles the processing of our movie array
+      //   renderButtons();
+      });
+      // Adding a click event listener to all elements with a class of "movie"
+      // $(document).on("click", ".band", displayBandInfo);
+      // // Calling the renderButtons function to display the intial buttons
+      // renderButtons();
+
+// <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.js">
+// <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+</script>
 </body>
 
 </html>
