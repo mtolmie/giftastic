@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title> Giftastic </title> 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
     
 </head>
 
@@ -13,63 +14,111 @@
 
 <div class="container">
     <h1> Cool Bands Search---Find a band that you like if I missed one from the selection</h1>
-    <!-- Rendered buttons will get dumped Here  -->
-    <div id="buttons-view"></div>
-    <form id="movie-form">
-      <button id=>Soundgarden</button>
-      <button id=>Pearl Jam</button>
-      <button id=>The Black Keys</button>
-      <button id=>Coldplay</button>
-      <button id=>BB King</button>
+
+<div id="buttons">
+    <button data-band="Soundgarden">
+      Soundgarden
+    </button>
+    <button data-band="Pearl Jam">
+      Pearl Jam
+    </button>
+    <button data-band="The Black Keys">
+      The Black Keys
+    </button>
+    <button data-band="Tupac">
+      Tupac
+    </button>
+    <button data-band="BB King">
+      BB King
+    </button>
+
+    <div id="gifs-appear-here">
+  </div>
       <input type="text" id="band-input"><br>
       <!-- Button triggers new movie to be added -->
       <input id="add-band" type="submit" value="submit">
     </form>
-    <!-- Movies will get dumped dere -->
+    <!-- bands will get dumped dere -->
     <div id="bands-view"></div>
 
-
+<script type ="text/javascript" src="https://code.jquery.com/jquery-2.2.0.js"></script>
   <script type="text/javascript">
+
+
+  $("button").on("click", function() {
+      var band = $(this).attr("data-band");
+      console.log(this);
     // Example queryURL for Giphy API
-    
+    var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + band + "&api_key=dc6zaTOxFJmzC&limit=10";
 
- var bandTopics = ["Soundgarden", "Pearl Jam", "The Black Keys", "Coldplay"];
-var queryURL = "http://api.giphy.com/v1/gifs/search?q=" +
-        bandTopics + "&api_key=dc6zaTOxFJmzC&limit=10";
-
-    function displaybandTopicsInfo() {
-        var topics = $(this).attr("data-name");
-        // Creating an AJAX call for the specific band button being clicked
-        $.ajax({
+ 	// var bandTopics = ["Soundgarden", "Pearl Jam", "The Black Keys", "Coldplay"];
+	$.ajax({
           url: queryURL,
           method: "GET"
-        }).done(function(response) {
-          // Creating a div to hold the movie
-          var bandDiv = $("<div class='band'>");
-          // Storing the rating data
-          var rating = response.Rated;
-          // Creating an element to have the rating displayed
-          var pOne = $("<p>").text("Rating: " + rating);
- });
-      }
+        })
+        .done(function(response) {
+          var results = response.data;
+
+          for (var i = 0; i < results.length; i++) {
+            var gifDiv = $("<div class='item'>");
+
+            var rating = results[i].rating;
+
+            var p = $("<p>").text("Rating: " + rating);
+
+            var personImage = $("<img>");
+            personImage.attr("src", results[i].images.fixed_height.url);
+
+            gifDiv.prepend(p);
+            gifDiv.prepend(personImage);
+
+            $("#gifs-appear-here").prepend(gifDiv);
+          }
+        });
+    });
+
+
+
+
+
+
+
+
+
+
+
+ //    function displaybandTopics() {
+ //        var topics = $(this).attr("data-name");
+ //        // Creating an AJAX call for the specific band button being clicked
+ //        $.ajax({
+ //          url: queryURL,
+ //          method: "GET"
+ //        }).done(function(response) {
+ //          // Creating a div to hold the movie
+ //          var bandDiv = $("<div class='band'>");
+ //          // Storing the rating data
+ //          var rating = response.Rated;
+ //          // Creating an element to have the rating displayed
+ //          var pOne = $("<p>").text("Rating: " + rating);
+ // });
+ //      }
 
  // This function handles events where a movie button is clicked
- 	$("#add-bandTopics").on("click", function(event) {
-        event.preventDefault();
-      // This line grabs the input from the textbox
-      var band = $("#band-input").val().trim();
-      //   // Adding movie from the textbox to our array
-       movies.push(band);
-      //   // Calling renderButtons which handles the processing of our movie array
-      //   renderButtons();
-      });
-      // Adding a click event listener to all elements with a class of "movie"
-      // $(document).on("click", ".band", displayBandInfo);
-      // // Calling the renderButtons function to display the intial buttons
-      // renderButtons();
-
-// <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.js">
-// <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+ 	// $("#add-bandTopics").on("click", function(event) {
+  //       event.preventDefault();
+  //     // This line grabs the input from the textbox
+  //     var band = $("#band-input").val().trim();
+  //     //   // Adding movie from the textbox to our array
+  //      movies.push(band);
+  //     //   // Calling renderButtons which handles the processing of our movie array
+  //     //   renderButtons();
+  //     });
+  //     // Adding a click event listener to all elements with a class of "movie"
+  //     // $(document).on("click", ".band", displayBandInfo);
+  //     // // Calling the renderButtons function to display the intial buttons
+  //     // renderButtons();
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
 </script>
 </body>
 
