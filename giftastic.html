@@ -5,11 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title> Giftastic </title> 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-
-    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">    
 </head>
-
 <body>
 
 <div class="container">
@@ -17,7 +14,7 @@
 
 <div id="buttons">
     <button data-band="Soundgarden">
-      Soundgarden
+     Soundgarden
     </button>
     <button data-band="Pearl Jam">
       Pearl Jam
@@ -32,6 +29,7 @@
       BB King
     </button>
 
+
     <div id="gifs-appear-here">
   </div>
       <input type="text" id="band-input"><br>
@@ -44,13 +42,33 @@
 <script type ="text/javascript" src="https://code.jquery.com/jquery-2.2.0.js"></script>
   <script type="text/javascript">
 
+$(".gif").on("click", function() {
+
+var state = $(this).attr("data-state");
+      console.log(state);
+
+if(state === "still") {
+        $(this).attr("data-state","animate");
+        $(this).attr("src",$(this).attr("data-animate"));
+      } else {
+        $(this).attr("data-state","still");
+        $(this).attr("src",$(this).attr("data-still"));
+      }
+
+     
+      // open the file in the browser and click on the images.
+      // // Then click again to pause.
+    });
+  
+
+	
 
   $("button").on("click", function() {
       var band = $(this).attr("data-band");
-      console.log(this);
+      console.log("this: ",this);
     // Example queryURL for Giphy API
     var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + band + "&api_key=dc6zaTOxFJmzC&limit=10";
-
+    
  	// var bandTopics = ["Soundgarden", "Pearl Jam", "The Black Keys", "Coldplay"];
 	$.ajax({
           url: queryURL,
@@ -58,8 +76,13 @@
         })
         .done(function(response) {
           var results = response.data;
-
+          console.log(results);
+          
           for (var i = 0; i < results.length; i++) {
+          	var movingImage = results[i].images.fixed_width_small.url;
+          	console.log("movingImage", movingImage);
+            var stillImage = results[i].images.fixed_width_small_still.url
+            console.log("stillImage", stillImage);
             var gifDiv = $("<div class='item'>");
 
             var rating = results[i].rating;
@@ -67,21 +90,36 @@
             var p = $("<p>").text("Rating: " + rating);
 
             var personImage = $("<img>");
-            personImage.attr("src", results[i].images.fixed_height.url);
+            personImage.attr("src", stillImage);
+            personImage.attr("data-state", "still");
 
             gifDiv.prepend(p);
             gifDiv.prepend(personImage);
 
             $("#gifs-appear-here").prepend(gifDiv);
+            
+
+          console.log(movingImage);
+            $(document).on("click", "img", function(){
+  				console.log(movingImage);
+  			var currentState = $(this).attr("data-state");
+  			console.log(currentState);
+  			if(currentState === "still"){
+  				$(this).attr("data-state", "moving");
+  				$(this).attr("src", movingImage);
+
+  			}else if(currentState === "moving"){
+  				$(this).attr("data-state", "still");
+  				$(this).attr("src", stillImage);
+  				
+  				}
+
+  			});
           }
+
+
         });
     });
-
-
-
-
-
-
 
 
 
