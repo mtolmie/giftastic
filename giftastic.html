@@ -45,7 +45,7 @@
 $(".gif").on("click", function() {
 
 var state = $(this).attr("data-state");
-      console.log(state);
+      // console.log(state);
 
 if(state === "still") {
         $(this).attr("data-state","animate");
@@ -65,7 +65,7 @@ if(state === "still") {
 
   $("button").on("click", function() {
       var band = $(this).attr("data-band");
-      console.log("this: ",this);
+      // console.log("this: ",this);
     // Example queryURL for Giphy API
     var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + band + "&api_key=dc6zaTOxFJmzC&limit=10";
     
@@ -80,42 +80,97 @@ if(state === "still") {
           
           for (var i = 0; i < results.length; i++) {
           	var movingImage = results[i].images.fixed_width_small.url;
-          	console.log("movingImage", movingImage);
+          	// console.log("movingImage", movingImage);
             var stillImage = results[i].images.fixed_width_small_still.url
-            console.log("stillImage", stillImage);
+            // console.log("stillImage", stillImage);
+            
             var gifDiv = $("<div class='item'>");
 
             var rating = results[i].rating;
 
             var p = $("<p>").text("Rating: " + rating);
 
-            var personImage = $("<img>");
-            personImage.attr("src", stillImage);
-            personImage.attr("data-state", "still");
+            var personImage = $("<img class = 'gifImage'>");
+            // now each image is going to have the class of gifimage
+            personImage.attr("src", movingImage);
+            // personImage.attr("data-state", "still");
 
             gifDiv.prepend(p);
             gifDiv.prepend(personImage);
 
             $("#gifs-appear-here").prepend(gifDiv);
+            console.log($("#gifs-appear-here"));
             
+            // need to create a class for each image to be able to call each image and call all images as a group.... 
+ 			}
 
-          console.log(movingImage);
-            $(document).on("click", "img", function(){
-  				console.log(movingImage);
-  			var currentState = $(this).attr("data-state");
-  			console.log(currentState);
-  			if(currentState === "still"){
-  				$(this).attr("data-state", "moving");
-  				$(this).attr("src", movingImage);
+ 			$(".gifImage").click(function(){
+ 				console.log($(this).attr("src"));
 
-  			}else if(currentState === "moving"){
-  				$(this).attr("data-state", "still");
-  				$(this).attr("src", stillImage);
+ 			});
+
+var bands = [];
+
+      // Function for displaying band data
+      function renderButtons() {
+
+        $("#bandss-view").empty();
+
+       
+        for (var i = 0; i < bands.length; i++) {
+
+          // Then dynamicaly generating buttons for each movie in the array.
+          // This code $("<button>") is all jQuery needs to create the start and end tag. (<button></button>)
+          var a = $("<button>");
+          // Adding a class
+          a.addClass("bands");
+       
+          a.attr("data-name", bands[i]);
+          
+          a.text(bands[i]);
+          // Adding the button to the HTML
+          $("#bands-view").append(a);
+        }
+      }
+
+      // This function handles events where one button is clicked
+      $("#add-bands").on("click", function(e) {
+        // event.preventDefault() prevents the form from trying to submit itself.
+        // We're using a form so that the user can hit enter instead of clicking the button if they want
+        e.preventDefault();
+        console.log(e);
+
+        // This line will grab the text from the input box
+        var bands = $("#bands-input").val().trim();
+        // The movie from the textbox is then added to our array
+        bands.push(bands);
+
+        // calling renderButtons which handles the processing of our band array
+        renderButtons();
+      });
+
+      // Calling the renderButtons function at least once to display the initial list of bands
+      renderButtons();
+
+
+
+     //      console.log(movingImage);
+     //        $(document).on("click", "img", function(){
+  			// 	console.log(movingImage);
+  			// var currentState = $(this).attr("data-state");
+  			// console.log(currentState);
+  			// if(currentState === "still"){
+  			// 	$(this).attr("data-state", "moving");
+  			// 	$(this).attr("src", movingImage);
+
+  			// }else if(currentState === "moving"){
+  			// 	$(this).attr("data-state", "still");
+  			// 	$(this).attr("src", stillImage);
   				
-  				}
+  			// 	}
 
-  			});
-          }
+  			// });
+         
 
 
         });
